@@ -1,0 +1,25 @@
+{
+  "name": "liri-node-app",
+  "version": "1.0.0",
+  "description": "language interpreting app that brings back info from twitter, spotify, or omdb",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Livingnight/liri-node-app.git"
+  },
+  "author": "Jay Jernigan",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Livingnight/liri-node-app/issues"
+  },
+  "homepage": "https://github.com/Livingnight/liri-node-app#readme",
+  "dependencies": {
+    "dotenv": "^5.0.1",
+    "node-spotify-api": "^1.0.7",
+    "request": "^2.85.0",
+    "twitter": "^1.7.1"
+  }
+}
