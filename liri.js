@@ -1,5 +1,4 @@
 //requiring all the dependencies
-
 //dotenv
 require('dotenv').config();
 const keys = require('./keys.js');
@@ -11,7 +10,6 @@ const Twitter = require('twitter');
 const request = require('request');
 //file system
 const fs = require('fs');
-
 //using dotenv to supply API keys
 //spotify api keys
 const spotify = new Spotify(keys.spotify);
@@ -19,14 +17,14 @@ const spotify = new Spotify(keys.spotify);
 const client = new Twitter(keys.twitter);
 //dynamically choose which api to use
 const api = process.argv[2];
-
-//parameters for twitter api
-let params = {
-    q: 'dragnosfall',
-    count: 20,
-    lang: 'en'
-};
+//function to run twitter npm module with search parameters
 const tweet = () => {
+    //parameters for twitter api
+    let params = {
+        q: 'dragnosfall',
+        count: 20,
+        lang: 'en'
+    };
     client.get('search/tweets', params, (error, tweets, response) => {
         if (error) {
             return console.log(error);
@@ -39,8 +37,9 @@ const tweet = () => {
         }
     });
 }
+//function to run spotify npm module with node arguments
 const music = () => {
-    const search = process.argv[3];
+    let search = process.argv[3];
     if (search) {
         let params = {type: 'track', query: search, limit: 5};
         console.log(params);
@@ -68,8 +67,9 @@ const music = () => {
                 console.log("-----------------");
             }
         })
-    } else {
-        let params = {type: 'track', query: 'This Way ace of base'};
+    }
+    else {
+        let params = {type: 'track', query: "the sign ace of base", limit: 1};
         console.log(params);
         spotify.search(params, (err, data) => {
             if (err) {
@@ -97,6 +97,7 @@ const music = () => {
         })
     }
 }
+//function to run the omdb api using the npm request module
 const movie = () => {
     let movie = process.argv[3];
     if (movie) {
@@ -126,7 +127,8 @@ const movie = () => {
                 console.log('--------------------------');
             }
         })
-    }else {
+    }
+    else {
         let queryURL = 'http://www.omdbapi.com/?t=' + 'Mr. Nobody' + '&y=&plot=short&apikey=trilogy';
         request(queryURL, (err, head, body) => {
             if (!err && head.statusCode === 200) {
@@ -159,13 +161,18 @@ const movie = () => {
 //twitter api call using arguments from node. finds last 20 tweets.
 if (api === 'my-tweets') {
     tweet();
+}
 //    brings back results from spotify api based on node arguments.
-} else if (api === 'spotify-this-song') {
+else if (api === 'spotify-this-song') {
     music();
 //Using omdb api to bring back information on user supplied movies into the terminal
-} else if (api === 'movie-this'){
+}
+//sends request to omdb and pull back results
+else if (api === 'movie-this'){
     movie();
-} else if(api === `do-what-it-says`){
+}
+//reads file
+else if(api === `do-what-it-says`){
     fs.readFile(`random.txt`, `utf8`, (err, data)=>{
         if(err){
             return console.log(err);
@@ -173,8 +180,8 @@ if (api === 'my-tweets') {
         let liriCmd = data.split(',');
         let lastApi = liriCmd[0];
         let search = liriCmd[1];
-        // console.log(lastApi);
-        // console.log(search);
+        console.log(lastApi);
+        console.log(search);
         if (lastApi === 'my-tweets') {
             let params = {
                 q: 'dragnosfall',
@@ -196,10 +203,10 @@ if (api === 'my-tweets') {
         } else if (lastApi === 'spotify-this-song') {
             // let search = process.argv[3];
             if (search) {
-                let params = {type: 'track', query: search, limit: 5};
-                console.log(params);
+                let saysParameter = {type: 'track', query: search, limit: 5};
+                console.log("spotify parameters: " + saysParameter );
                 // console.log(movie);
-                spotify.search(params, (err, data) => {
+                spotify.search(saysParameter , (err, data) => {
                     if (err) {
                         console.log('error');
                         return console.log(err);
@@ -224,9 +231,9 @@ if (api === 'my-tweets') {
                     }
                 })
             } else {
-                let param = {type: 'track', query: 'This Way', limit: 5};
-                console.log(params);
-                spotify.search(param, (err, data) => {
+                let saysParameter = {type: 'track', query: 'the sign ace of base', limit: 1};
+                console.log("Spotify parameters: "+ JSON.stringify(saysParameter) );
+                spotify.search(saysParameter , (err, data) => {
                     if (err) {
                         console.log('error');
                         return console.log(err);
@@ -310,14 +317,6 @@ if (api === 'my-tweets') {
                     }
                 })
             }
-
-
-
-
-
-
         }
-
-
     })
 }
