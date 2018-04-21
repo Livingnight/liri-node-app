@@ -18,6 +18,14 @@ const client = new Twitter(keys.twitter);
 //dynamically choose which api to use
 const api = process.argv[2];
 //function to run twitter npm module with search parameters
+const append = (file, data) => {
+    fs.appendFile(file, data, function (err) {
+        if (err) {
+            return console.log(err);
+        }
+
+    })
+}
 const tweet = () => {
     //parameters for twitter api
     let params = {
@@ -43,7 +51,6 @@ const music = () => {
     if (search) {
         let params = {type: 'track', query: search, limit: 5};
         console.log(params);
-        // console.log(movie);
         spotify.search(params, (err, data) => {
             if (err) {
                 console.log('error');
@@ -52,25 +59,18 @@ const music = () => {
             console.log('made it this far');
             console.log("-----------------");
             for (let i = 0; i < data.tracks.items.length; i++) {
-
-                //    The song name
-                console.log(`Song Title: ` + data.tracks.items[i].name);
-
-                //    The artist's name
-                console.log(`Artist(s): ` + data.tracks.items[i].album.artists[0].name);
-
-                //    A preview link of the song from spotify
-                console.log(`Link to song: ` + data.tracks.items[i].external_urls.spotify);
-
-                //    The album that the song is from
-                console.log(`Album Name: ` + data.tracks.items[i].album.name);
-                console.log("-----------------");
+                let songInfo =
+                    `Song Title: ${data.tracks.items[i].name}\n` +
+                    `Artist(s): ${data.tracks.items[i].album.artists[0].name}\n` +
+                    `Link to song: ${data.tracks.items[i].external_urls.spotify}\n` +
+                    `Album Name: ${data.tracks.items[i].album.name}\n\n`;
+                append('music.txt', songInfo);
+                console.log(songInfo);
             }
         })
     }
     else {
         let params = {type: 'track', query: "the sign ace of base", limit: 1};
-        console.log(params);
         spotify.search(params, (err, data) => {
             if (err) {
                 console.log('error');
@@ -79,20 +79,13 @@ const music = () => {
             console.log('made it this far');
             console.log("-----------------");
             for (let i = 0; i < data.tracks.items.length; i++) {
-
-                //    The song name
-                console.log(`Song Title: ` + data.tracks.items[i].name);
-
-                //     console.log(data.tracks.items.album);
-                //    The artist's name
-                console.log(`Artist(s): ` + data.tracks.items[i].album.artists[0].name);
-
-                //    A preview link of the song from spotify
-                console.log(`Link to song: ` + data.tracks.items[i].external_urls.spotify);
-
-                //    The album that the song is from
-                console.log(`Album Name: ` + data.tracks.items[i].album.name);
-                console.log("-----------------");
+                let songInfo =
+                    `Song Title: ${data.tracks.items[i].name}\n` +
+                    `Artist(s): ${data.tracks.items[i].album.artists[0].name}\n` +
+                    `Link to song: ${data.tracks.items[i].external_urls.spotify}\n` +
+                    `Album Name: ${data.tracks.items[i].album.name}\n\n`;
+                append('music.txt', songInfo);
+                console.log(songInfo);
             }
         })
     }
@@ -104,26 +97,17 @@ const movie = () => {
         let queryURL = 'http://www.omdbapi.com/?t=' + movie + '&y=&plot=short&apikey=trilogy';
         request(queryURL, (err, head, body) => {
             if (!err && head.statusCode === 200) {
-
-                // Parse the body of the site and recover just the imdbRating
-                // (Note: The syntax below for parsing isn't obvious. Just spend a few moments dissecting it).
-
-                //Title of move
-                console.log(`Title: ` + JSON.parse(body).Title);
-                //Year the movie came out
-                console.log("Year of Premier: " + JSON.parse(body).Year);
-                //IMDB rating of the movie
-                console.log(JSON.parse(body).Ratings[0].Source +" Rating: " + JSON.parse(body).Ratings[0].Value);
-                //Rotten Tomatoes rating of movie
-                console.log(JSON.parse(body).Ratings[1].Source + " Rating: " + JSON.parse(body).Ratings[1].Value);
-                //Country where move was produced
-                console.log("Countries of Production: " + JSON.parse(body).Country);
-                //Language of the movie
-                console.log("Original Language of Movie: " + JSON.parse(body).Language);
-                //Plot of the movie
-                console.log("Plot of the Movie: " + JSON.parse(body).Plot);
-                //Actors in the movie
-                console.log("Actors in the Movie: " + JSON.parse(body).Actors);
+                let movieInfo =
+                    `Title: ${JSON.parse(body).Title}\n` +
+                    `Year of Premier: ${JSON.parse(body).Year}\n` +
+                    `${JSON.parse(body).Ratings[0].Source} Rating: ${JSON.parse(body).Ratings[0].Value}\n` +
+                    `${JSON.parse(body).Ratings[1].Source} Rating: ${JSON.parse(body).Ratings[1].Value}\n`+
+                    `Countries of Production: ${JSON.parse(body).Country}\n`+
+                    `Original Language of Movie: ${JSON.parse(body).Language}\n`+
+                    `Plot of the Movie: ${JSON.parse(body).Plot}\n`+
+                    `Actors in the Movie: ${JSON.parse(body).Actors}\n\n`;
+                append('movie.txt', movieInfo);
+                console.log(movieInfo);
                 console.log('--------------------------');
             }
         })
@@ -132,28 +116,18 @@ const movie = () => {
         let queryURL = 'http://www.omdbapi.com/?t=' + 'Mr. Nobody' + '&y=&plot=short&apikey=trilogy';
         request(queryURL, (err, head, body) => {
             if (!err && head.statusCode === 200) {
-
-                // Parse the body of the site and recover just the imdbRating
-                // (Note: The syntax below for parsing isn't obvious. Just spend a few moments dissecting it).
-
-                //Title of move
-                console.log(`Title: ` + JSON.parse(body).Title);
-                //Year the movie came out
-                console.log("Year of Premier: " + JSON.parse(body).Year);
-                //IMDB rating of the movie
-                console.log(JSON.parse(body).Ratings[0].Source +" Rating: " + JSON.parse(body).Ratings[0].Value);
-                //Rotten Tomatoes rating of movie
-                console.log(JSON.parse(body).Ratings[1].Source + " Rating: " + JSON.parse(body).Ratings[1].Value);
-                //Country where move was produced
-                console.log("Countries of Production: " + JSON.parse(body).Country);
-                //Language of the movie
-                console.log("Original Language of Movie: " + JSON.parse(body).Language);
-                //Plot of the movie
-                console.log("Plot of the Movie: " + JSON.parse(body).Plot);
-                //Actors in the movie
-                console.log("Actors in the Movie: " + JSON.parse(body).Actors);
+                let movieInfo =
+                    `Title: ${JSON.parse(body).Title}\n` +
+                    `Year of Premier: ${JSON.parse(body).Year}\n` +
+                    `${JSON.parse(body).Ratings[0].Source} Rating: ${JSON.parse(body).Ratings[0].Value}\n` +
+                    `${JSON.parse(body).Ratings[1].Source} Rating: ${JSON.parse(body).Ratings[1].Value}\n`+
+                    `Countries of Production: ${JSON.parse(body).Country}\n`+
+                    `Original Language of Movie: ${JSON.parse(body).Language}\n`+
+                    `Plot of the Movie: ${JSON.parse(body).Plot}\n`+
+                    `Actors in the Movie: ${JSON.parse(body).Actors}\n\n`;
+                append('movie.txt', movieInfo);
+                console.log(movieInfo);
                 console.log('--------------------------');
-
             }
         })
     }
@@ -168,13 +142,13 @@ else if (api === 'spotify-this-song') {
 //Using omdb api to bring back information on user supplied movies into the terminal
 }
 //sends request to omdb and pull back results
-else if (api === 'movie-this'){
+else if (api === 'movie-this') {
     movie();
 }
 //reads file
-else if(api === `do-what-it-says`){
-    fs.readFile(`random.txt`, `utf8`, (err, data)=>{
-        if(err){
+else if (api === `do-what-it-says`) {
+    fs.readFile(`random.txt`, `utf8`, (err, data) => {
+        if (err) {
             return console.log(err);
         }
         let liriCmd = data.split(',');
@@ -204,9 +178,9 @@ else if(api === `do-what-it-says`){
             // let search = process.argv[3];
             if (search) {
                 let saysParameter = {type: 'track', query: search, limit: 5};
-                console.log("spotify parameters: " + saysParameter );
+                console.log("spotify parameters: " + saysParameter);
                 // console.log(movie);
-                spotify.search(saysParameter , (err, data) => {
+                spotify.search(saysParameter, (err, data) => {
                     if (err) {
                         console.log('error');
                         return console.log(err);
@@ -214,26 +188,19 @@ else if(api === `do-what-it-says`){
                     console.log('made it this far');
                     console.log("-----------------");
                     for (let i = 0; i < data.tracks.items.length; i++) {
-
-                        //    The song name
-                        console.log(`Song Title: ` + data.tracks.items[i].name);
-
-                        //     console.log(data.tracks.items.album);
-                        //    The artist's name
-                        console.log(`Artist(s): ` + data.tracks.items[i].album.artists[0].name);
-
-                        //    A preview link of the song from spotify
-                        console.log(`Link to song: ` + data.tracks.items[i].external_urls.spotify);
-
-                        //    The album that the song is from
-                        console.log(`Album Name: ` + data.tracks.items[i].album.name);
-                        console.log("-----------------");
+                        let songInfo =
+                            `Song Title: ${data.tracks.items[i].name}\n` +
+                            `Artist(s): ${data.tracks.items[i].album.artists[0].name}\n` +
+                            `Link to song: ${data.tracks.items[i].external_urls.spotify}\n` +
+                            `Album Name: ${data.tracks.items[i].album.name}\n\n`;
+                        append('music.txt', songInfo);
+                        console.log(songInfo);
                     }
                 })
             } else {
                 let saysParameter = {type: 'track', query: 'the sign ace of base', limit: 1};
-                console.log("Spotify parameters: "+ JSON.stringify(saysParameter) );
-                spotify.search(saysParameter , (err, data) => {
+                console.log("Spotify parameters: " + JSON.stringify(saysParameter));
+                spotify.search(saysParameter, (err, data) => {
                     if (err) {
                         console.log('error');
                         return console.log(err);
@@ -241,20 +208,13 @@ else if(api === `do-what-it-says`){
                     console.log('made it this far');
                     console.log("-----------------");
                     for (let i = 0; i < data.tracks.items.length; i++) {
-
-                        //    The song name
-                        console.log(`Song Title: ` + data.tracks.items[i].name);
-
-                        //     console.log(data.tracks.items.album);
-                        //    The artist's name
-                        console.log(`Artist(s): ` + data.tracks.items[i].album.artists[0].name);
-
-                        //    A preview link of the song from spotify
-                        console.log(`Link to song: ` + data.tracks.items[i].external_urls.spotify);
-
-                        //    The album that the song is from
-                        console.log(`Album Name: ` + data.tracks.items[i].album.name);
-                        console.log("-----------------");
+                        let songInfo =
+                            `Song Title: ${data.tracks.items[i].name}\n` +
+                            `Artist(s): ${data.tracks.items[i].album.artists[0].name}\n` +
+                            `Link to song: ${data.tracks.items[i].external_urls.spotify}\n` +
+                            `Album Name: ${data.tracks.items[i].album.name}\n\n`;
+                        append('music.txt', songInfo);
+                        console.log(songInfo);
                     }
                 })
             }
@@ -274,7 +234,7 @@ else if(api === `do-what-it-says`){
                         //Year the movie came out
                         console.log("Year of Premier: " + JSON.parse(body).Year);
                         //IMDB rating of the movie
-                        console.log(JSON.parse(body).Ratings[0].Source +" Rating: " + JSON.parse(body).Ratings[0].Value);
+                        console.log(JSON.parse(body).Ratings[0].Source + " Rating: " + JSON.parse(body).Ratings[0].Value);
                         //Rotten Tomatoes rating of movie
                         console.log(JSON.parse(body).Ratings[1].Source + " Rating: " + JSON.parse(body).Ratings[1].Value);
                         //Country where move was produced
@@ -288,7 +248,7 @@ else if(api === `do-what-it-says`){
                         console.log('--------------------------');
                     }
                 })
-            }else {
+            } else {
                 let queryURL = 'http://www.omdbapi.com/?t=' + 'Mr. Nobody' + '&y=&plot=short&apikey=trilogy';
                 request(queryURL, (err, head, body) => {
                     if (!err && head.statusCode === 200) {
@@ -301,7 +261,7 @@ else if(api === `do-what-it-says`){
                         //Year the movie came out
                         console.log("Year of Premier: " + JSON.parse(body).Year);
                         //IMDB rating of the movie
-                        console.log(JSON.parse(body).Ratings[0].Source +" Rating: " + JSON.parse(body).Ratings[0].Value);
+                        console.log(JSON.parse(body).Ratings[0].Source + " Rating: " + JSON.parse(body).Ratings[0].Value);
                         //Rotten Tomatoes rating of movie
                         console.log(JSON.parse(body).Ratings[1].Source + " Rating: " + JSON.parse(body).Ratings[1].Value);
                         //Country where move was produced
