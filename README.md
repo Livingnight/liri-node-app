@@ -1,6 +1,6 @@
 # liri-node-app
 
-# https://github.com/Livingnight/liri-node-app
+[My GitHub link]https://github.com/Livingnight/liri-node-app
 
 ## This app is used to take user input in and pull information from one of a few different apis
 ## using node modules that reference those api's.
