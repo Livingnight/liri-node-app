@@ -26,10 +26,7 @@ const append = (file, data) => {
 };
 const tweet = () => {
     //parameters for twitter api
-    let params = {
-        q: 'dragnosfall',
-        count: 20,
-        lang: 'en'
+    let params = {q: 'dragnosfall',count: 20,lang: 'en'
     };
     client.get('search/tweets', params, (error, tweets, response) => {
         if (error) {
@@ -37,8 +34,8 @@ const tweet = () => {
         }
         console.log("-----------------");
         for (let i = 0; i < tweets.statuses.length; i++) {
-            let tweetInfo =`\n`+tweets.statuses[i].text+'\n'+tweets.statuses[i].created_at+'\n';
-            append('tweet.txt',tweetInfo);
+            let tweetInfo = `\n` + tweets.statuses[i].text + '\n' + tweets.statuses[i].created_at + '\n';
+            append('tweet.txt', tweetInfo);
             console.log(tweets.statuses[i].text + '\n' + tweets.statuses[i].created_at);
             console.log("-----------------");
         }
@@ -68,24 +65,8 @@ const music = search => {
         })
     }
     else {
-        let params = {type: 'track', query: "the sign ace of base", limit: 1};
-        spotify.search(params, (err, data) => {
-            if (err) {
-                console.log('error');
-                return console.log(err);
-            }
-            console.log('made it this far');
-            console.log("-----------------");
-            for (let i = 0; i < data.tracks.items.length; i++) {
-                let songInfo =
-                    `Song Title: ${data.tracks.items[i].name}\n` +
-                    `Artist(s): ${data.tracks.items[i].album.artists[0].name}\n` +
-                    `Link to song: ${data.tracks.items[i].external_urls.spotify}\n` +
-                    `Album Name: ${data.tracks.items[i].album.name}\n\n`;
-                append('music.txt', songInfo);
-                console.log(songInfo);
-            }
-        })
+        music('the sign ace of base')
+
     }
 };
 //function to run the omdb api using the npm request module
@@ -110,24 +91,7 @@ const movie = search => {
         })
     }
     else {
-        let queryURL = 'http://www.omdbapi.com/?t=' + 'Mr. Nobody' + '&y=&plot=short&apikey=trilogy';
-        request(queryURL, (err, head, body) => {
-            if (!err && head.statusCode === 200) {
-                let movieInfo =
-                    `Title: ${JSON.parse(body).Title}\n` +
-                    `Year of Premier: ${JSON.parse(body).Year}\n` +
-                    `${JSON.parse(body).Ratings[0].Source} Rating: ${JSON.parse(body).Ratings[0].Value}\n` +
-                    `${JSON.parse(body).Ratings[1].Source} Rating: ${JSON.parse(body).Ratings[1].Value}\n` +
-                    `Countries of Production: ${JSON.parse(body).Country}\n` +
-                    `Original Language of Movie: ${JSON.parse(body).Language}\n` +
-                    `Plot of the Movie: ${JSON.parse(body).Plot}\n` +
-                    `Actors in the Movie: ${JSON.parse(body).Actors}\n\n`;
-                append('movie.txt', movieInfo);
-                console.log(movieInfo);
-                console.log('--------------------------');
-            }
-        })
-    }
+       movie("mr. nobody")
 };
 //twitter api call using arguments from node. finds last 20 tweets.
 if (api === 'my-tweets') {
@@ -163,4 +127,4 @@ else if (api === `do-what-it-says`) {
 
         }
     })
-}
+}}
